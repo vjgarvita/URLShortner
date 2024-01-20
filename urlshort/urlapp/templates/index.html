@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Url Shortner</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'style.css'%}">
+</head>
+<body>
+    <div id='container'>
+        <header><h2>Django Url Shortner</h2></header>
+        <form id = 'myform'>
+            {% csrf_token %}
+        <input type="text" id='url', name="link" placeholder="Enter the URL">
+        <input type="submit" id="submitBtn" value="Shorten URL">
+        </form>
+        <div id="shortened_link"></div>
+    </div>
+    <script>
+        let form = document.getElementById('myform')
+        let shortened_link = document.getElementById('shortened_link')
+        form.addEventListener('submit', shortenUrl)
+        function shortenUrl(e){
+            e.preventDefault()
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'create' %}",
+                data: $('#myform').serialize(),
+                datatype: "json",
+                success: function(data){
+                    shortened_link.innerText = 'localhost:8000/' + data
+
+                }
+            })
+        }
+    </script>
+</body>
+</html>
